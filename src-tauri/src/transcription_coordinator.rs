@@ -6,7 +6,7 @@ use std::sync::mpsc::{self, Sender};
 use std::sync::Arc;
 use std::thread;
 use std::time::{Duration, Instant};
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Emitter, Manager};
 
 const DEBOUNCE: Duration = Duration::from_millis(30);
 const RELEASE_GRACE: Duration = Duration::from_millis(50);
@@ -172,6 +172,7 @@ enum Command {
     Input(InputEvent),
     Cancel { recording_was_active: bool },
     ProcessingFinished,
+    ToggleRecognitionLanguage,
 }
 
 /// Decide whether a key-up should be deferred (so auto-repeat can cancel it)
@@ -233,6 +234,10 @@ impl CoordinatorState {
             pending_release: None,
             pending_press: None,
         }
+    }
+
+    fn can_change_language(&self) -> bool {
+        self.stage == Stage::Idle
     }
 
     /// Deadline of the deferred release, if any — drives `recv_timeout`.
@@ -579,6 +584,13 @@ impl TranscriptionCoordinator {
                                 run_effect(&app, &mut state, effect);
                             }
                         }
+                        Command::ToggleRecognitionLanguage => {
+                            if state.can_change_language() {
+                                crate::actions::toggle_recognition_language(&app);
+                            } else {
+                                let _ = app.emit("language-shortcut", "busy");
+                            }
+                        }
                     }
                 }
                 debug!("Transcription coordinator exited");
@@ -663,6 +675,13 @@ impl TranscriptionCoordinator {
 
     pub fn notify_processing_finished(&self) {
         if self.tx.send(Command::ProcessingFinished).is_err() {
+            warn!("Transcription coordinator channel closed");
+        }
+    }
+
+    /// Serialize language changes with recording start/stop events.
+    pub fn toggle_recognition_language(&self) {
+        if self.tx.send(Command::ToggleRecognitionLanguage).is_err() {
             warn!("Transcription coordinator channel closed");
         }
     }
@@ -1106,6 +1125,32 @@ mod tests {
         let effect = state.on_input(toggle_input(true), now + Duration::from_millis(100));
         assert!(matches!(effect, Some(Effect::Stop { .. })));
         assert_eq!(state.stage, Stage::Processing);
+    }
+
+    #[test]
+    fn language_switch_waits_until_recording_and_processing_finish() {
+        let mut state = CoordinatorState::new();
+        let now = Instant::now();
+        assert!(state.can_change_language());
+        state.on_input(toggle_input(true), now);
+        assert!(!state.can_change_language());
+        state.on_input(toggle_input(true), now + Duration::from_millis(100));
+        assert!(!state.can_change_language());
+        state.on_processing_finished();
+        assert!(state.can_change_language());
+    }
+
+    #[test]
+    fn queued_recording_keeps_language_switch_blocked_when_processing_finishes() {
+        let mut state = CoordinatorState::new();
+        let now = Instant::now();
+        drive_into_processing(&mut state, now);
+        state.on_input(toggle_input(true), now + Duration::from_millis(200));
+        assert!(matches!(
+            state.on_processing_finished(),
+            Some(Effect::Start { .. })
+        ));
+        assert!(!state.can_change_language());
     }
 
     const OTHER_BINDING: &str = "transcribe_with_post_process";

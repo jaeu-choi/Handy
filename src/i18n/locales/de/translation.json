@@ -199,20 +199,30 @@
           "transcribe_with_post_process": {
             "name": "Nachbearbeitungs-Tastenkürzel",
             "description": "Optional: Ein dediziertes Tastenkürzel, das immer die KI-Nachbearbeitung auf deine Transkription anwendet."
+          },
+          "toggle_recognition_language": {
+            "name": "Switch Korean / English",
+            "description": "Switch speech recognition between Korean and English when not recording or processing."
           }
         },
         "errors": {
           "restore": "Ursprüngliches Tastenkürzel konnte nicht wiederhergestellt werden",
           "set": "Tastenkürzel konnte nicht gesetzt werden: {{error}}",
           "reset": "Tastenkürzel konnte nicht auf Originalwert zurückgesetzt werden"
-        }
+        },
+        "resetLabel": "Reset {{shortcut}} to default"
       },
       "language": {
         "title": "Sprache",
         "description": "Wähle die Sprache für die Spracherkennung. Auto erkennt die Sprache automatisch, die Auswahl einer bestimmten Sprache kann die Genauigkeit verbessern.",
         "searchPlaceholder": "Sprachen suchen...",
         "noResults": "Keine Sprachen gefunden",
-        "auto": "Automatisch"
+        "auto": "Automatisch",
+        "ko": "Korean",
+        "en": "English",
+        "switched": "Speech recognition: {{language}}",
+        "busy": "Switch languages after recording and transcription finish.",
+        "unsupported_model": "Choose a model that supports both Korean and English to use this shortcut."
       },
       "shortcutActivation": {
         "title": "Verhalten der Tastenkombination",

@@ -18,6 +18,7 @@ use log::{debug, error, warn};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 use std::future::Future;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tauri::Manager;
@@ -861,6 +862,75 @@ impl ShortcutAction for TranscribeAction {
     }
 }
 
+#[derive(Default)]
+struct ToggleRecognitionLanguageAction {
+    pressed: AtomicBool,
+}
+
+impl ToggleRecognitionLanguageAction {
+    fn update_pressed(&self, pressed: bool) -> bool {
+        let was_pressed = self.pressed.swap(pressed, Ordering::SeqCst);
+        pressed && !was_pressed
+    }
+}
+
+impl ShortcutAction for ToggleRecognitionLanguageAction {
+    fn start(&self, app: &AppHandle, _binding_id: &str, _shortcut_str: &str) {
+        // Key auto-repeat must not switch the language back while held.
+        if !self.update_pressed(true) {
+            return;
+        }
+        if let Some(coordinator) = app.try_state::<TranscriptionCoordinator>() {
+            coordinator.toggle_recognition_language();
+        }
+    }
+
+    fn stop(&self, _app: &AppHandle, _binding_id: &str, _shortcut_str: &str) {
+        self.update_pressed(false);
+    }
+}
+
+fn next_recognition_language(current: &str, supported: &[String]) -> Option<&'static str> {
+    let supports = |code| {
+        supported
+            .iter()
+            .any(|value| crate::managers::model::canonical_language_code(value) == code)
+    };
+    if !supports("ko") || !supports("en") {
+        return None;
+    }
+    Some(
+        if crate::managers::model::canonical_language_code(current) == "ko" {
+            "en"
+        } else {
+            "ko"
+        },
+    )
+}
+
+/// Switch language while idle, without reloading the selected model.
+pub(crate) fn toggle_recognition_language(app: &AppHandle) {
+    let mut settings = get_settings(app);
+    let model = app
+        .state::<Arc<ModelManager>>()
+        .get_model_info(&settings.selected_model);
+    let language = model.as_ref().and_then(|model| {
+        next_recognition_language(&settings.selected_language, &model.supported_languages)
+    });
+    let Some(language) = language else {
+        let _ = app.emit("language-shortcut", "unsupported_model");
+        return;
+    };
+    settings.selected_language = language.to_string();
+    crate::settings::write_settings(app, settings);
+    let _ = app.emit(
+        "settings-changed",
+        serde_json::json!({ "setting": "selected_language" }),
+    );
+    let _ = app.emit("language-shortcut", language);
+    crate::overlay::show_language_overlay(app, language);
+}
+
 // Cancel Action
 struct CancelAction;
 
@@ -911,6 +981,10 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
         Arc::new(TranscribeAction { post_process: true }) as Arc<dyn ShortcutAction>,
     );
     map.insert(
+        "toggle_recognition_language".to_string(),
+        Arc::new(ToggleRecognitionLanguageAction::default()) as Arc<dyn ShortcutAction>,
+    );
+    map.insert(
         "cancel".to_string(),
         Arc::new(CancelAction) as Arc<dyn ShortcutAction>,
     );
@@ -924,8 +998,8 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
 #[cfg(test)]
 mod tests {
     use super::{
-        complete_unless_cancelled, is_blank_transcription, should_use_streaming_overlay,
-        strip_think_block,
+        complete_unless_cancelled, is_blank_transcription, next_recognition_language,
+        should_use_streaming_overlay, strip_think_block, ToggleRecognitionLanguageAction,
     };
     use crate::settings::OverlayStyle;
     use std::future;
@@ -933,6 +1007,35 @@ mod tests {
     use std::sync::Arc;
     use std::thread;
     use std::time::Duration;
+
+    #[test]
+    fn recognition_language_switches_both_ways_and_leaves_auto_deterministically() {
+        let supported = vec!["en".to_string(), "ko".to_string(), "ja".to_string()];
+        assert_eq!(next_recognition_language("ko", &supported), Some("en"));
+        assert_eq!(next_recognition_language("en", &supported), Some("ko"));
+        assert_eq!(next_recognition_language("en-US", &supported), Some("ko"));
+        assert_eq!(next_recognition_language("auto", &supported), Some("ko"));
+    }
+
+    #[test]
+    fn recognition_language_switch_requires_both_languages() {
+        for supported in [vec![], vec!["en".to_string()], vec!["ko".to_string()]] {
+            assert_eq!(next_recognition_language("ko", &supported), None);
+        }
+    }
+
+    #[test]
+    fn held_language_shortcut_does_not_toggle_back_on_repeated_presses() {
+        let action = ToggleRecognitionLanguageAction::default();
+        let supported = vec!["ko".to_string(), "en".to_string()];
+        let mut language = "ko";
+        for pressed in [true, true, true, false, true, true] {
+            if action.update_pressed(pressed) {
+                language = next_recognition_language(language, &supported).unwrap();
+            }
+        }
+        assert_eq!(language, "ko", "two physical presses should switch twice");
+    }
 
     #[test]
     fn blank_transcription_is_detected() {

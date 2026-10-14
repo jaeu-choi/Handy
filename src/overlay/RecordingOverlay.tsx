@@ -11,8 +11,15 @@ import type {
 } from "@/bindings";
 import i18n, { syncLanguageFromSettings } from "@/i18n";
 import { getLanguageDirection } from "@/lib/utils/rtl";
+import { Languages } from "lucide-react";
 
-type OverlayState = "recording" | "streaming" | "transcribing" | "processing";
+type OverlayState =
+  | "recording"
+  | "streaming"
+  | "transcribing"
+  | "processing"
+  | "language-ko"
+  | "language-en";
 
 // Number of reactive bars in the waveform (the simple, smoothed style shared by
 // every overlay form). Mic levels arrive as 16 FFT buckets; we take the first N.
@@ -50,11 +57,13 @@ const RecordingOverlay: React.FC = () => {
   // until they scroll back down.
   const capRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef(true);
+  const showGenerationRef = useRef(0);
   const direction = getLanguageDirection(i18n.language);
 
   useEffect(() => {
     const setupEventListeners = async () => {
       const unlistenShow = await listen("show-overlay", async (event) => {
+        const generation = ++showGenerationRef.current;
         const overlayState = event.payload as OverlayState;
         // Reset synchronously before settings I/O. A fast microphone can emit
         // recording-ready while the awaits below are in flight; resetting after
@@ -79,6 +88,7 @@ const RecordingOverlay: React.FC = () => {
         } catch {
           // Keep the previous/default placement if settings can't be read.
         }
+        if (generation !== showGenerationRef.current) return;
         setState(overlayState);
         if (overlayState === "streaming") {
           setPhase("listening");
@@ -90,6 +100,7 @@ const RecordingOverlay: React.FC = () => {
       });
 
       const unlistenHide = await listen("hide-overlay", () => {
+        showGenerationRef.current += 1;
         setIsVisible(false);
         setCaptureReady(false);
       });
@@ -158,6 +169,26 @@ const RecordingOverlay: React.FC = () => {
   }, [session]);
 
   if (!isVisible) return null;
+
+  if (state === "language-ko" || state === "language-en") {
+    return (
+      <div dir={direction} className={`ov-stage ${position} ov-fade show`}>
+        <div className="scard compact" role="status" aria-live="polite">
+          <div className="sbase">
+            <div className="sbase-l">
+              <Languages size={16} aria-hidden="true" />
+            </div>
+            <span className="swork-label">
+              {t(
+                `settings.general.language.${state === "language-ko" ? "ko" : "en"}`,
+              )}
+            </span>
+            <div className="sbase-r" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Re-pin when the user is within ~a line of the bottom; unpin otherwise.
   const handleStreamScroll = () => {

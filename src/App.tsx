@@ -166,6 +166,26 @@ function App() {
     };
   }, [t]);
 
+  useEffect(() => {
+    const unlisten = listen<"ko" | "en" | "busy" | "unsupported_model">(
+      "language-shortcut",
+      ({ payload }) => {
+        if (payload === "busy" || payload === "unsupported_model") {
+          toast.info(t(`settings.general.language.${payload}`));
+        } else {
+          toast.success(
+            t("settings.general.language.switched", {
+              language: t(`settings.general.language.${payload}`),
+            }),
+          );
+        }
+      },
+    );
+    return () => {
+      unlisten.then((fn) => fn());
+    };
+  }, [t]);
+
   // Listen for paste failures and show a toast.
   // The technical error detail is logged to handy.log on the Rust side
   // (see actions.rs `error!("Failed to paste transcription: ...")`),

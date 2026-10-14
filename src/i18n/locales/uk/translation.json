@@ -179,20 +179,30 @@
           "transcribe_with_post_process": {
             "name": "Гаряча клавіша постобробки",
             "description": "Необов'язково: Спеціальна гаряча клавіша, яка завжди застосовує AI-постобробку до вашої транскрипції."
+          },
+          "toggle_recognition_language": {
+            "name": "Switch Korean / English",
+            "description": "Switch speech recognition between Korean and English when not recording or processing."
           }
         },
         "errors": {
           "restore": "Не вдалося відновити початкове скорочення",
           "set": "Не вдалося встановити скорочення: {{error}}",
           "reset": "Не вдалося скинути скорочення до початкового значення"
-        }
+        },
+        "resetLabel": "Reset {{shortcut}} to default"
       },
       "language": {
         "title": "Мова",
         "description": "Оберіть мову для розпізнавання мовлення. Режим «Авто» визначить мову автоматично, а вибір конкретної мови може покращити точність.",
         "searchPlaceholder": "Пошук мов...",
         "noResults": "Мов не знайдено",
-        "auto": "Авто"
+        "auto": "Авто",
+        "ko": "Korean",
+        "en": "English",
+        "switched": "Speech recognition: {{language}}",
+        "busy": "Switch languages after recording and transcription finish.",
+        "unsupported_model": "Choose a model that supports both Korean and English to use this shortcut."
       },
       "shortcutActivation": {
         "title": "Поведінка комбінації клавіш",

@@ -199,20 +199,30 @@
           "transcribe_with_post_process": {
             "name": "Phím tắt xử lý sau",
             "description": "Tùy chọn: Phím tắt chuyên dụng luôn áp dụng xử lý sau bằng AI cho bản chuyển đổi của bạn."
+          },
+          "toggle_recognition_language": {
+            "name": "Switch Korean / English",
+            "description": "Switch speech recognition between Korean and English when not recording or processing."
           }
         },
         "errors": {
           "restore": "Không thể khôi phục phím tắt gốc",
           "set": "Không thể đặt phím tắt: {{error}}",
           "reset": "Không thể đặt lại phím tắt về giá trị gốc"
-        }
+        },
+        "resetLabel": "Reset {{shortcut}} to default"
       },
       "language": {
         "title": "Ngôn ngữ",
         "description": "Chọn ngôn ngữ để nhận dạng giọng nói. Tự động sẽ tự động xác định ngôn ngữ, trong khi chọn một ngôn ngữ cụ thể có thể cải thiện độ chính xác cho ngôn ngữ đó.",
         "searchPlaceholder": "Tìm kiếm ngôn ngữ...",
         "noResults": "Không tìm thấy ngôn ngữ",
-        "auto": "Tự động"
+        "auto": "Tự động",
+        "ko": "Korean",
+        "en": "English",
+        "switched": "Speech recognition: {{language}}",
+        "busy": "Switch languages after recording and transcription finish.",
+        "unsupported_model": "Choose a model that supports both Korean and English to use this shortcut."
       },
       "shortcutActivation": {
         "title": "Hành vi phím tắt",

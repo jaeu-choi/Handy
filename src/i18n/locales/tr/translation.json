@@ -199,20 +199,30 @@
           "transcribe_with_post_process": {
             "name": "Son İşlem Kısayolu",
             "description": "İsteğe bağlı: Transkripsiyonunuza her zaman yapay zekâ ile son işlem uygulayan özel bir kısayol tuşu."
+          },
+          "toggle_recognition_language": {
+            "name": "Switch Korean / English",
+            "description": "Switch speech recognition between Korean and English when not recording or processing."
           }
         },
         "errors": {
           "restore": "Orijinal kısayol geri yüklenemedi",
           "set": "Kısayol ayarlanamadı: {{error}}",
           "reset": "Kısayol orijinal değerine sıfırlanamadı"
-        }
+        },
+        "resetLabel": "Reset {{shortcut}} to default"
       },
       "language": {
         "title": "Dil",
         "description": "Konuşma tanıma dilini seçin. 'Otomatik' seçeneği dili kendisi belirler, ancak belirli bir dil seçmek o dildeki doğruluğu artırabilir.",
         "searchPlaceholder": "Dil ara...",
         "noResults": "Dil bulunamadı",
-        "auto": "Otomatik"
+        "auto": "Otomatik",
+        "ko": "Korean",
+        "en": "English",
+        "switched": "Speech recognition: {{language}}",
+        "busy": "Switch languages after recording and transcription finish.",
+        "unsupported_model": "Choose a model that supports both Korean and English to use this shortcut."
       },
       "shortcutActivation": {
         "title": "Kısayol davranışı",

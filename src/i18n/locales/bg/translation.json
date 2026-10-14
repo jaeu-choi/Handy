@@ -179,20 +179,30 @@
           "transcribe_with_post_process": {
             "name": "Бърз клавиш за постобработка",
             "description": "По избор: отделна комбинация, която винаги прилага ИИ постобработка върху транскрипцията."
+          },
+          "toggle_recognition_language": {
+            "name": "Switch Korean / English",
+            "description": "Switch speech recognition between Korean and English when not recording or processing."
           }
         },
         "errors": {
           "restore": "Неуспешно възстановяване на оригиналния бърз клавиш",
           "set": "Неуспешно задаване на бързия клавиш: {{error}}",
           "reset": "Неуспешно нулиране на бързия клавиш към първоначалната стойност"
-        }
+        },
+        "resetLabel": "Reset {{shortcut}} to default"
       },
       "language": {
         "title": "Език",
         "description": "Изберете езика за разпознаване на реч. „Автоматично“ определя езика сам, а изборът на конкретен език може да подобри точността за него.",
         "searchPlaceholder": "Търсене на езици...",
         "noResults": "Няма намерени езици",
-        "auto": "Автоматично"
+        "auto": "Автоматично",
+        "ko": "Korean",
+        "en": "English",
+        "switched": "Speech recognition: {{language}}",
+        "busy": "Switch languages after recording and transcription finish.",
+        "unsupported_model": "Choose a model that supports both Korean and English to use this shortcut."
       },
       "shortcutActivation": {
         "title": "Поведение на клавишната комбинация",

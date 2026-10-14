@@ -34,6 +34,14 @@ normal model cache, so an existing Whisper Large v3 Q5_K_M download is reusable.
 Quit the original Handy before using the same global shortcut in Handy Personal.
 Grant microphone and Accessibility access on first launch.
 
+Press **Ctrl+Option+L** to switch speech recognition between Korean and English
+(Ctrl+Alt+L on Windows/Linux). Press again to switch back. General settings has a
+customizable **Switch Korean / English** shortcut. The existing language selector
+updates immediately and the choice is saved; the model stays loaded.
+Language switches are ignored while recording or processing, and require a model
+that supports both languages. With overlays enabled, a short indicator confirms
+the selected language. From Auto or another language, the first press selects Korean.
+
 Use Whisper Large v3 with Korean selected. Large v3 is appropriate when already
 fast enough; Turbo reduces the decoder from 32 layers to 4 to trade a little
 quality for speed. Neither guarantees English technical-term spelling in

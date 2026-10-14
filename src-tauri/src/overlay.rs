@@ -630,6 +630,33 @@ pub fn show_processing_overlay(app_handle: &AppHandle) {
     show_overlay_state(app_handle, "processing");
 }
 
+/// Briefly display the recognition language without taking keyboard focus.
+pub fn show_language_overlay(app_handle: &AppHandle, language: &str) {
+    if settings::get_settings(app_handle).overlay_style == OverlayStyle::None {
+        return;
+    }
+    let state = if language == "ko" {
+        "language-ko"
+    } else {
+        "language-en"
+    };
+    let handle = app_handle.clone();
+    let _ = app_handle.run_on_main_thread(move || {
+        show_overlay_state_on_main(&handle, state);
+        let shown_at = OVERLAY_SHOW_GENERATION.load(Ordering::SeqCst);
+        tauri::async_runtime::spawn(async move {
+            tokio::time::sleep(std::time::Duration::from_millis(1200)).await;
+            let hide_handle = handle.clone();
+            let _ = handle.run_on_main_thread(move || {
+                // A new recording or another language switch owns the overlay now.
+                if OVERLAY_SHOW_GENERATION.load(Ordering::SeqCst) == shown_at {
+                    hide_recording_overlay(&hide_handle);
+                }
+            });
+        });
+    });
+}
+
 /// Updates the overlay window position based on current settings
 pub fn update_overlay_position(app_handle: &AppHandle) {
     // Positioning queries monitors/cursor (GDK/Xlib on Linux) and moves the

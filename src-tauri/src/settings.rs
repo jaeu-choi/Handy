@@ -929,6 +929,21 @@ pub fn get_default_settings() -> AppSettings {
             current_binding: default_post_process_shortcut.to_string(),
         },
     );
+    #[cfg(target_os = "macos")]
+    let default_language_shortcut = "ctrl+option+l";
+    #[cfg(not(target_os = "macos"))]
+    let default_language_shortcut = "ctrl+alt+l";
+    bindings.insert(
+        "toggle_recognition_language".to_string(),
+        ShortcutBinding {
+            id: "toggle_recognition_language".to_string(),
+            name: "Switch Korean / English".to_string(),
+            description: "Switches the speech recognition language between Korean and English."
+                .to_string(),
+            default_binding: default_language_shortcut.to_string(),
+            current_binding: default_language_shortcut.to_string(),
+        },
+    );
     bindings.insert(
         "cancel".to_string(),
         ShortcutBinding {
@@ -1311,6 +1326,14 @@ mod tests {
         let result = get_stored_binding(&settings, "unknown");
 
         assert_eq!(result.unwrap_err(), "Binding with id 'unknown' not found");
+    }
+
+    #[test]
+    fn language_shortcut_default_is_valid_for_both_keyboard_backends() {
+        let settings = get_default_settings();
+        let binding = &settings.bindings["toggle_recognition_language"];
+        crate::shortcut::tauri_impl::validate_shortcut(&binding.current_binding).unwrap();
+        crate::shortcut::handy_keys::validate_shortcut(&binding.current_binding).unwrap();
     }
 
     fn default_settings_json() -> serde_json::Value {

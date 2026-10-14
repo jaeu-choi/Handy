@@ -179,20 +179,30 @@
           "transcribe_with_post_process": {
             "name": "후처리 단축키",
             "description": "선택 사항: 항상 AI 후처리를 적용하는 전용 단축키입니다."
+          },
+          "toggle_recognition_language": {
+            "name": "언어 전환 단축키",
+            "description": "녹음과 인식이 끝난 상태에서 음성 인식 언어를 한국어와 영어로 전환합니다."
           }
         },
         "errors": {
           "restore": "원래 단축키 복원에 실패했습니다",
           "set": "단축키 설정 실패: {{error}}",
           "reset": "단축키를 원래 값으로 재설정하는데 실패했습니다"
-        }
+        },
+        "resetLabel": "{{shortcut}} 기본값으로 복원"
       },
       "language": {
         "title": "언어",
         "description": "음성 인식 언어를 선택하세요. 자동은 언어를 자동으로 감지하며, 특정 언어를 선택하면 해당 언어의 정확도가 향상될 수 있습니다.",
         "searchPlaceholder": "언어 검색...",
         "noResults": "언어를 찾을 수 없습니다",
-        "auto": "자동"
+        "auto": "자동",
+        "ko": "한국어",
+        "en": "영어",
+        "switched": "음성 인식 언어: {{language}}",
+        "busy": "녹음과 인식이 끝난 뒤 언어를 전환해 주세요.",
+        "unsupported_model": "현재 모델이 한국어와 영어를 모두 지원해야 언어를 전환할 수 있습니다."
       },
       "shortcutActivation": {
         "title": "단축키 동작",
