@@ -1,3 +1,4 @@
+use crate::text_dictionary::{default_replacements, TextReplacement};
 use crate::utils;
 use log::{debug, warn};
 use serde::de::{self, Visitor};
@@ -439,6 +440,12 @@ pub struct AppSettings {
     pub log_level: LogLevel,
     #[serde(default)]
     pub custom_words: Vec<String>,
+    #[serde(default = "default_text_replacements_enabled")]
+    pub text_replacements_enabled: bool,
+    #[serde(default = "default_replacements")]
+    pub text_replacements: Vec<TextReplacement>,
+    #[serde(default)]
+    pub guarded_correction_enabled: bool,
     #[serde(default)]
     pub model_unload_timeout: ModelUnloadTimeout,
     #[serde(default = "default_word_correction_threshold")]
@@ -540,6 +547,10 @@ const CURRENT_SETTINGS_SCHEMA_VERSION: u32 = 2;
 
 fn default_settings_schema_version() -> u32 {
     CURRENT_SETTINGS_SCHEMA_VERSION
+}
+
+fn default_text_replacements_enabled() -> bool {
+    true
 }
 
 fn default_hold_threshold_ms() -> u64 {
@@ -955,6 +966,9 @@ pub fn get_default_settings() -> AppSettings {
         debug_mode: false,
         log_level: default_log_level(),
         custom_words: Vec::new(),
+        text_replacements_enabled: true,
+        text_replacements: default_replacements(),
+        guarded_correction_enabled: false,
         model_unload_timeout: ModelUnloadTimeout::default(),
         word_correction_threshold: default_word_correction_threshold(),
         history_limit: default_history_limit(),

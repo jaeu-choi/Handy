@@ -1314,11 +1314,12 @@ impl TranscriptionManager {
                         // whisper run extension to a non-whisper arch is rejected
                         // with INVALID_ARG, so skip it there and let the fuzzy
                         // post-correction handle custom words instead.
-                        let family = if settings.custom_words.is_empty() || !model_is_whisper {
+                        let hint_words = crate::text_dictionary::hint_words(&settings);
+                        let family = if hint_words.is_empty() || !model_is_whisper {
                             None
                         } else {
                             Some(RunExtension::Whisper(WhisperRunOptions {
-                                initial_prompt: Some(settings.custom_words.join(", ")),
+                                initial_prompt: Some(hint_words.join(", ")),
                                 ..Default::default()
                             }))
                         };

@@ -9,6 +9,7 @@ import type {
   OrtAcceleratorSetting,
   ShortcutActivation,
   VadBackend,
+  TextReplacement,
 } from "@/bindings";
 import { commands } from "@/bindings";
 import { toast } from "sonner";
@@ -137,6 +138,16 @@ const settingUpdaters: {
     commands.changeOverlayPositionSetting(value as string),
   debug_mode: (value) => commands.changeDebugModeSetting(value as boolean),
   custom_words: (value) => commands.updateCustomWords(value as string[]),
+  text_replacements: async (value) => {
+    const result = await commands.updateTextReplacements(
+      value as TextReplacement[],
+    );
+    if (result.status === "error") throw new Error(result.error);
+  },
+  text_replacements_enabled: (value) =>
+    commands.changeTextReplacementsEnabled(value as boolean),
+  guarded_correction_enabled: (value) =>
+    commands.changeGuardedCorrectionEnabled(value as boolean),
   word_correction_threshold: (value) =>
     commands.changeWordCorrectionThresholdSetting(value as number),
   paste_delay_ms: (value) =>

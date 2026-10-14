@@ -13,6 +13,7 @@ import {
 import { Button } from "../../ui/Button";
 import { ResetButton } from "../../ui/ResetButton";
 import { Input } from "../../ui/Input";
+import { ToggleSwitch } from "../../ui/ToggleSwitch";
 
 import { ProviderSelect } from "../PostProcessingSettingsApi/ProviderSelect";
 import { BaseUrlField } from "../PostProcessingSettingsApi/BaseUrlField";
@@ -426,6 +427,11 @@ PostProcessingSettingsPrompts.displayName = "PostProcessingSettingsPrompts";
 
 export const PostProcessingSettings: React.FC = () => {
   const { t } = useTranslation();
+  const { getSetting, updateSetting, isUpdating } = useSettings();
+  const limited = getSetting("guarded_correction_enabled") ?? false;
+  const appleIntelligence =
+    getSetting("post_process_provider_id") === "apple_intelligence";
+  const limitedActive = limited && !appleIntelligence;
 
   return (
     <div className="max-w-3xl w-full mx-auto space-y-6">
@@ -442,7 +448,21 @@ export const PostProcessingSettings: React.FC = () => {
       </SettingsGroup>
 
       <SettingsGroup title={t("settings.postProcessing.prompts.title")}>
-        <PostProcessingSettingsPrompts />
+        <ToggleSwitch
+          checked={limitedActive}
+          onChange={(enabled) =>
+            updateSetting("guarded_correction_enabled", enabled)
+          }
+          isUpdating={isUpdating("guarded_correction_enabled")}
+          disabled={appleIntelligence}
+          label={t("settings.textDictionary.limitedCorrection")}
+          description={t(
+            "settings.textDictionary.limitedCorrectionDescription",
+          )}
+          descriptionMode="inline"
+          grouped
+        />
+        {!limitedActive && <PostProcessingSettingsPrompts />}
       </SettingsGroup>
     </div>
   );

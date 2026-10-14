@@ -645,6 +645,29 @@
         "label": "새 소식 표시",
         "description": "Handy 업데이트 후 릴리스 노트를 표시합니다"
       }
+    },
+    "textDictionary": {
+      "enabled": "텍스트 사전 사용",
+      "enabledDescription": "AI 응답을 기다리지 않고 등록한 표기를 바로 치환합니다.",
+      "title": "텍스트 치환 사전",
+      "description": "인식된 표기를 원하는 텍스트로 바꿉니다. 영어 표기는 Whisper 인식 힌트로도 사용합니다.",
+      "from": "인식된 표기",
+      "to": "원하는 표기",
+      "fromPlaceholder": "위스퍼",
+      "toPlaceholder": "Whisper",
+      "add": "규칙 추가",
+      "import": "사전 가져오기",
+      "importDescription": "SuperWhisper의 JSON 사전을 가져올 수 있습니다. 같은 인식 표기의 기존 규칙은 갱신됩니다.",
+      "empty": "등록한 규칙이 없습니다. 항상 같은 철자로 입력할 용어를 추가하세요.",
+      "remove": "{{word}} 규칙 삭제",
+      "limitedCorrection": "AI 교정을 작은 수정으로 제한",
+      "limitedCorrectionDescription": "AI 전사 단축키를 사용할 때 작은 오타와 허용된 용어 교정만 적용합니다. 정해진 교정 프롬프트를 사용하며 Apple Intelligence에서는 사용할 수 없습니다.",
+      "errors": {
+        "invalidEntry": "JSON 사전의 각 표기는 비어 있지 않은 64자 이내 텍스트여야 합니다. 줄바꿈은 사용할 수 없습니다.",
+        "duplicate": "이미 등록된 인식 표기입니다. 기존 규칙을 삭제한 뒤 추가하세요.",
+        "tooManyEntries": "사전에는 최대 1,000개 규칙을 등록할 수 있습니다.",
+        "saveFailed": "사전을 저장하지 못했습니다. 다시 시도하세요."
+      }
     }
   },
   "footer": {

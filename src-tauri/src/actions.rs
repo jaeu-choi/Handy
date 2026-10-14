@@ -146,6 +146,38 @@ async fn post_process_transcription(settings: &AppSettings, transcription: &str)
         return None;
     }
 
+    if settings.guarded_correction_enabled && provider.id != APPLE_INTELLIGENCE_PROVIDER_ID {
+        if transcription.chars().count() < 20 {
+            return None;
+        }
+        let prompt = crate::text_dictionary::correction_prompt(settings, transcription);
+        let api_key = settings
+            .post_process_api_keys
+            .get(&provider.id)
+            .cloned()
+            .unwrap_or_default();
+        let request = crate::llm_client::send_chat_completion(
+            &provider,
+            api_key,
+            &model,
+            prompt,
+            matches!(provider.id.as_str(), "custom" | "openrouter"),
+        );
+        return match tokio::time::timeout(Duration::from_secs(10), request).await {
+            Ok(Ok(Some(response))) => Some(crate::text_dictionary::apply_guarded_corrections(
+                transcription,
+                strip_think_block(&response),
+                settings,
+            )),
+            _ => {
+                warn!(
+                    "Limited correction did not finish successfully; keeping the dictionary output"
+                );
+                None
+            }
+        };
+    }
+
     let selected_prompt_id = match &settings.post_process_selected_prompt_id {
         Some(id) => id.clone(),
         None => {
@@ -356,8 +388,12 @@ pub(crate) async fn process_transcription_output(
     post_process: bool,
 ) -> ProcessedTranscription {
     let settings = get_settings(app);
-    let mut final_text = transcription.to_string();
-    let mut post_processed_text: Option<String> = None;
+    let mut final_text = if settings.text_replacements_enabled {
+        crate::text_dictionary::apply_replacements(transcription, &settings.text_replacements)
+    } else {
+        transcription.to_string()
+    };
+    let mut post_processed_text = (final_text != transcription).then(|| final_text.clone());
     let mut post_process_prompt: Option<String> = None;
 
     if post_process {
@@ -365,7 +401,11 @@ pub(crate) async fn process_transcription_output(
             post_processed_text = Some(processed_text.clone());
             final_text = processed_text;
 
-            if let Some(prompt_id) = &settings.post_process_selected_prompt_id {
+            if settings.guarded_correction_enabled
+                && settings.post_process_provider_id != APPLE_INTELLIGENCE_PROVIDER_ID
+            {
+                post_process_prompt = Some(crate::text_dictionary::CORRECTION_PROMPT.to_string());
+            } else if let Some(prompt_id) = &settings.post_process_selected_prompt_id {
                 if let Some(prompt) = settings
                     .post_process_prompts
                     .iter()

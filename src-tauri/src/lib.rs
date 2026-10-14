@@ -21,6 +21,7 @@ mod secure_input;
 mod settings;
 mod shortcut;
 mod signal_handle;
+mod text_dictionary;
 mod transcription_coordinator;
 mod tray;
 mod tray_i18n;
@@ -688,6 +689,9 @@ pub fn run(cli_args: CliArgs) {
             shortcut::delete_post_process_prompt,
             shortcut::set_post_process_selected_prompt,
             shortcut::update_custom_words,
+            commands::update_text_replacements,
+            commands::change_text_replacements_enabled,
+            commands::change_guarded_correction_enabled,
             shortcut::suspend_all_bindings,
             shortcut::resume_all_bindings,
             shortcut::change_mute_while_recording_setting,
@@ -945,7 +949,7 @@ pub fn run(cli_args: CliArgs) {
             // for portable mode (redirects WebView2 cache to portable Data dir)
             let mut win_builder =
                 tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("/".into()))
-                    .title("Handy")
+                    .title("Handy Personal")
                     .inner_size(680.0, 570.0)
                     .min_inner_size(680.0, 570.0)
                     .resizable(true)

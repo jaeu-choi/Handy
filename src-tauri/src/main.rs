@@ -5,6 +5,8 @@ use clap::Parser;
 use handy_app_lib::CliArgs;
 
 fn main() {
+    // Keep personal dictionary changes when upstream publishes a new release.
+    std::env::set_var("HANDY_DISABLE_UPDATER", "1");
     let cli_args = CliArgs::parse();
 
     #[cfg(target_os = "linux")]

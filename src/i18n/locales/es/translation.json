@@ -645,6 +645,29 @@
         "label": "Mostrar novedades",
         "description": "Mostrar notas de la versión después de las actualizaciones de Handy"
       }
+    },
+    "textDictionary": {
+      "enabled": "Use text dictionary",
+      "enabledDescription": "Apply your spelling rules immediately, without waiting for AI.",
+      "title": "Text replacement dictionary",
+      "description": "Replace recognized spellings with your preferred text. English spellings also become Whisper recognition hints.",
+      "from": "Recognized spelling",
+      "to": "Preferred spelling",
+      "fromPlaceholder": "위스퍼",
+      "toPlaceholder": "Whisper",
+      "add": "Add rule",
+      "import": "Import dictionary",
+      "importDescription": "Import a SuperWhisper JSON dictionary. Existing rules with the same recognized spelling are updated.",
+      "empty": "No replacement rules yet. Add a term you want Handy to spell consistently.",
+      "remove": "Remove rule for {{word}}",
+      "limitedCorrection": "Limit AI correction to small changes",
+      "limitedCorrectionDescription": "When using the AI transcription shortcut, accept only small spelling fixes and approved technical terms. Uses a fixed correction prompt. Not available with Apple Intelligence.",
+      "errors": {
+        "invalidEntry": "Use a JSON dictionary with non-empty text pairs, at most 64 characters each, without line breaks.",
+        "duplicate": "This recognized spelling already has a rule. Remove it before adding a replacement.",
+        "tooManyEntries": "The dictionary can contain at most 1,000 rules.",
+        "saveFailed": "Could not save the dictionary. Please try again."
+      }
     }
   },
   "footer": {

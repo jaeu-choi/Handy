@@ -34,10 +34,11 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       tooltipPosition={tooltipPosition}
     >
       <label
-        className={`flex items-center ${disabled || isUpdating ? "cursor-not-allowed" : "cursor-pointer"}`}
+        className={`flex items-center min-h-[40px] ${disabled || isUpdating ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
         <input
           type="checkbox"
+          aria-label={label}
           value=""
           className="sr-only peer"
           checked={checked}

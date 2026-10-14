@@ -51,6 +51,37 @@ pub fn get_default_settings() -> Result<AppSettings, String> {
 
 #[tauri::command]
 #[specta::specta]
+pub fn update_text_replacements(
+    app: AppHandle,
+    entries: Vec<crate::text_dictionary::TextReplacement>,
+) -> Result<(), String> {
+    crate::text_dictionary::validate_replacements(&entries)?;
+    let mut settings = get_settings(&app);
+    settings.text_replacements = entries;
+    write_settings(&app, settings);
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn change_text_replacements_enabled(app: AppHandle, enabled: bool) -> Result<(), String> {
+    let mut settings = get_settings(&app);
+    settings.text_replacements_enabled = enabled;
+    write_settings(&app, settings);
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn change_guarded_correction_enabled(app: AppHandle, enabled: bool) -> Result<(), String> {
+    let mut settings = get_settings(&app);
+    settings.guarded_correction_enabled = enabled;
+    write_settings(&app, settings);
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
 pub fn get_log_dir_path(app: AppHandle) -> Result<String, String> {
     let log_dir = crate::portable::app_log_dir(&app)
         .map_err(|e| format!("Failed to get log directory: {}", e))?;
