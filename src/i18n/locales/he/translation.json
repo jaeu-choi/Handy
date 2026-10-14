@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "גישת נגישות",
-        "description": "נדרש כדי להקליד את הטקסט המתומלל לתוך האפליקציות שלך."
+        "description": "נדרש כדי להקליד את הטקסט המתומלל לתוך האפליקציות שלך.",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "תן הרשאה",
       "granted": "ניתנה",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "בדיקת ההרשאות נכשלה. נסה שוב.",
         "requestFailed": "בקשת ההרשאה נכשלה. נסה שוב."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

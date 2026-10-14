@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "Erişilebilirlik Erişimi",
-        "description": "Transkribe edilen metni uygulamalarınıza yazabilmek için gereklidir."
+        "description": "Transkribe edilen metni uygulamalarınıza yazabilmek için gereklidir.",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "İzin Ver",
       "granted": "Verildi",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "İzinler kontrol edilemedi. Lütfen tekrar deneyin.",
         "requestFailed": "İzin isteği başarısız oldu. Lütfen tekrar deneyin."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "アクセシビリティへのアクセス",
-        "description": "アプリに文字起こししたテキストを入力するために必要です。"
+        "description": "アプリに文字起こししたテキストを入力するために必要です。",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "権限を許可",
       "granted": "許可済み",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "権限の確認に失敗しました。もう一度お試しください。",
         "requestFailed": "権限のリクエストに失敗しました。もう一度お試しください。"
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

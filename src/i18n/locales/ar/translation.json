@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "إمكانية الوصول",
-        "description": ".مطلوب لكتابة النص المفرغ في تطبيقاتك"
+        "description": ".مطلوب لكتابة النص المفرغ في تطبيقاتك",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "منح الإذن",
       "granted": "تم المنح",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "فشل التحقق من الأذونات. يرجير المحاولة مرة أخرى.",
         "requestFailed": "فشل طلب الإذن. يرجى المحاولة مرة أخرى."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

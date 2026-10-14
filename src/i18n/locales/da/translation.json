@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "Tilgængelighedsadgang",
-        "description": "Påkrævet for at skrive den transskriberede tekst ind i dine programmer."
+        "description": "Påkrævet for at skrive den transskriberede tekst ind i dine programmer.",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "Giv tilladelse",
       "granted": "Givet",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "Kunne ikke tjekke tilladelser. Prøv igen.",
         "requestFailed": "Kunne ikke anmode om tilladelse. Prøv igen."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

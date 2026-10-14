@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Permissions test harness</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const query = new URLSearchParams(location.search);
+      window.__permissionTest = {
+        accessibility: query.get("accessibility") === "true",
+        microphone: query.get("microphone") !== "false",
+        hangAccessibility: query.has("hang"),
+        accessibilityChecks: 0,
+        initialized: 0,
+        completed: 0,
+        openedSettings: [],
+      };
+      window.__TAURI_OS_PLUGIN_INTERNALS__ = {
+        platform: "macos",
+        os_type: "macos",
+      };
+      window.__TAURI_INTERNALS__ = {
+        async invoke(command, args = {}) {
+          const state = window.__permissionTest;
+          if (command === "get_app_settings") return { app_language: "en" };
+          if (command.endsWith("|check_accessibility_permission")) {
+            state.accessibilityChecks++;
+            return state.hangAccessibility
+              ? new Promise(() => {})
+              : state.accessibility;
+          }
+          if (command.endsWith("|check_microphone_permission"))
+            return state.microphone;
+          if (
+            command.endsWith("|request_accessibility_permission") ||
+            command.endsWith("|request_microphone_permission")
+          )
+            return null;
+          if (command === "plugin:opener|open_url") {
+            state.openedSettings.push(args.url);
+            return null;
+          }
+          if (
+            command === "initialize_enigo" ||
+            command === "initialize_shortcuts" ||
+            command === "get_available_microphones" ||
+            command === "get_available_output_devices"
+          ) {
+            state.initialized++;
+            return new Promise(() => {});
+          }
+          throw new Error("Unmocked permission test command: " + command);
+        },
+      };
+    </script>
+    <script type="module" src="/tests/fixtures/permissions.tsx"></script>
+  </body>
+</html>

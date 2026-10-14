@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "Доступ к универсальному доступу",
-        "description": "Необходим для ввода расшифрованного текста в ваши приложения."
+        "description": "Необходим для ввода расшифрованного текста в ваши приложения.",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "Предоставить разрешение",
       "granted": "Предоставлено",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "Не удалось проверить разрешения. Пожалуйста, попробуйте снова.",
         "requestFailed": "Не удалось запросить разрешение. Пожалуйста, попробуйте снова."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

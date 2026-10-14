@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "ऐक्सेसिबिलिटी ऐक्सेस",
-        "description": "ट्रांसक्राइब किया गया टेक्स्ट आपके ऐप्लिकेशन में टाइप करने के लिए ज़रूरी."
+        "description": "ट्रांसक्राइब किया गया टेक्स्ट आपके ऐप्लिकेशन में टाइप करने के लिए ज़रूरी.",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "अनुमति दें",
       "granted": "अनुमति मिल गई",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "अनुमतियां जांची नहीं जा सकीं. कृपया फिर से कोशिश करें.",
         "requestFailed": "अनुमति मांगी नहीं जा सकी. कृपया फिर से कोशिश करें."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

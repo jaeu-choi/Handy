@@ -16,6 +16,8 @@
     "format:backend": "cd src-tauri && cargo fmt",
     "test:keyboard": "bun src/lib/utils/keyboard.test.ts",
     "test:dictionary": "bun src/lib/utils/textDictionary.test.ts",
+    "test:permissions": "bun src/lib/utils/permissionTimeout.test.ts",
+    "build:personal:macos": "bun run tauri build --bundles app && python3 scripts/sign-personal-macos.py",
     "test:playwright": "playwright test",
     "test:playwright:ui": "playwright test --ui",
     "check:translations": "bun scripts/check-translations.ts",

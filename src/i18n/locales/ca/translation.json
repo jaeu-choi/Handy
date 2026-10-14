@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "Accés a l'accessibilitat",
-        "description": "Necessari per escriure el text transcrit a les aplicacions."
+        "description": "Necessari per escriure el text transcrit a les aplicacions.",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "Concediu el permís",
       "granted": "Concedit",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "No s'han pogut comprovar els permisos. Torneu-ho a provar.",
         "requestFailed": "No s'ha pogut sol·licitar el permís. Torneu-ho a provar."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

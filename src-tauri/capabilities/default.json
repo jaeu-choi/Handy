@@ -6,6 +6,17 @@
   "permissions": [
     "core:default",
     "opener:default",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        {
+          "url": "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+        },
+        {
+          "url": "x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone"
+        }
+      ]
+    },
     "store:default",
     "updater:default",
     "process:default",

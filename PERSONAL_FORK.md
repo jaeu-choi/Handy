@@ -34,6 +34,21 @@ normal model cache, so an existing Whisper Large v3 Q5_K_M download is reusable.
 Quit the original Handy before using the same global shortcut in Handy Personal.
 Grant microphone and Accessibility access on first launch.
 
+Personal macOS releases use a persistent local code-signing certificate, pinned
+to this bundle identifier. Its private keychain, password, and certificate live
+under ~/Library/Application Support/com.jaeuchoe.handy.personal/local-signing,
+outside the repository. Keep that directory when rebuilding. The certificate is
+trusted for code signing in the current user account, and the keychain search
+list is restored after signing. This is a local personal build, not a notarized
+Developer ID distribution.
+
+When replacing an older ad-hoc build, quit Handy Personal, remove its old entry
+from System Settings → Privacy & Security → Accessibility, then add
+/Applications/Handy Personal.app and enable it once. The old entry can still show
+as enabled while matching an earlier executable hash. Permission onboarding now
+rechecks automatically, keeps Settings and retry available, and returns control
+when a native permission check times out.
+
 Press **Ctrl+Option+L** to switch speech recognition between Korean and English
 (Ctrl+Alt+L on Windows/Linux). Press again to switch back. General settings has a
 customizable **Switch Korean / English** shortcut. The existing language selector
@@ -63,13 +78,19 @@ Install Rust, Bun, and the macOS prerequisites in BUILD.md, then:
     bun run build
     bun run lint
     bun run test:dictionary
+    bun run test:permissions
     bun run check:translations
     cd src-tauri
     cargo test --locked --lib
     cargo clippy --locked --lib
     cargo fmt -- --check
 
-Build the optimized app with bun run tauri build --bundles app from the repo root.
+Build the installed macOS app with **bun run build:personal:macos** from the repo
+root. This builds and then signs with the same local certificate every time.
+Do not install the intermediate ad-hoc output of a plain tauri build.
+Permission UI regressions run with bun run test:playwright tests/permissions.spec.ts.
+For an existing Chrome installation, set PLAYWRIGHT_EXECUTABLE_PATH to its
+executable; otherwise install Playwright's Chromium first.
 Command Line Tools builds use Handy's Apple Intelligence stubs; Whisper and
 Ollama/OpenAI-compatible post-processing work without full Xcode.
 
@@ -85,3 +106,4 @@ copyright/license notices retained. Model licenses apply separately.
 - [Whisper Large v3 Turbo model card](https://huggingface.co/openai/whisper-large-v3-turbo)
 - [Whisper developer explanation of mixed-language limitations](https://github.com/openai/whisper/discussions/1160)
 - [MIT license](https://opensource.org/license/mit)
+- [Apple: code identity and permission persistence](https://developer.apple.com/documentation/technotes/tn3127-inside-code-signing-requirements)

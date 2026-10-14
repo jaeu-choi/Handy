@@ -3,6 +3,7 @@ import {
   useLayoutEffect,
   useState,
   useRef,
+  useCallback,
   type ReactNode,
 } from "react";
 import { toast, Toaster } from "sonner";
@@ -30,6 +31,7 @@ import { useSettings } from "./hooks/useSettings";
 import { useSettingsStore } from "./stores/settingsStore";
 import { commands } from "@/bindings";
 import { getLanguageDirection, initializeRTL } from "@/lib/utils/rtl";
+import { withPermissionTimeout } from "@/lib/utils/permissionTimeout";
 
 type OnboardingStep = "accessibility" | "model" | "done";
 
@@ -236,7 +238,7 @@ function App() {
 
   const revealMainWindowForPermissions = async () => {
     try {
-      await commands.showMainWindowCommand();
+      await withPermissionTimeout(commands.showMainWindowCommand());
     } catch (e) {
       console.warn("Failed to show main window for permission onboarding:", e);
     }
@@ -257,8 +259,8 @@ function App() {
         if (currentPlatform === "macos") {
           try {
             const [hasAccessibility, hasMicrophone] = await Promise.all([
-              checkAccessibilityPermission(),
-              checkMicrophonePermission(),
+              withPermissionTimeout(checkAccessibilityPermission()),
+              withPermissionTimeout(checkMicrophonePermission()),
             ]);
             if (!hasAccessibility || !hasMicrophone) {
               await revealMainWindowForPermissions();
@@ -267,7 +269,9 @@ function App() {
             }
           } catch (e) {
             console.warn("Failed to check macOS permissions:", e);
-            // If we can't check, proceed to main app and let them fix it there
+            await revealMainWindowForPermissions();
+            setOnboardingStep("accessibility");
+            return;
           }
         }
 
@@ -301,11 +305,11 @@ function App() {
     }
   };
 
-  const handleAccessibilityComplete = () => {
+  const handleAccessibilityComplete = useCallback(() => {
     // Returning users already have models, skip to main app
     // New users need to select a model
     setOnboardingStep(isReturningUser ? "done" : "model");
-  };
+  }, [isReturningUser]);
 
   const handleModelSelected = () => {
     // Transition to main app - user has started a download

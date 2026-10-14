@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "Достъп за достъпност",
-        "description": "Необходим е, за да въвежда транскрибирания текст във вашите приложения."
+        "description": "Необходим е, за да въвежда транскрибирания текст във вашите приложения.",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "Даване на разрешение",
       "granted": "Разрешено",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "Проверката на разрешенията не бе успешна. Опитайте отново.",
         "requestFailed": "Заявката за разрешение не бе успешна. Опитайте отново."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {

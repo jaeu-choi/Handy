@@ -4,6 +4,12 @@ This file provides guidance to AI coding assistants working with code in this re
 
 ## Development Commands
 
+**Personal fork macOS installations:** use `bun run build:personal:macos` for
+release builds and install its signed `.app`. This reuses the private local
+certificate documented in PERSONAL_FORK.md. Plain `tauri build` produces an
+intermediate ad-hoc app whose identity changes on rebuild, invalidating macOS
+permission records. Never commit the signing keychain, password, or private key.
+
 **Prerequisites:**
 
 - [Rust](https://rustup.rs/) (latest stable)

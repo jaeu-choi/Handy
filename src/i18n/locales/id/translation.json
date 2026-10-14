@@ -108,7 +108,8 @@
       },
       "accessibility": {
         "title": "Izin Aksesibilitas",
-        "description": "Diperlukan untuk mengetik teks hasil transkripsi ke aplikasi Anda."
+        "description": "Diperlukan untuk mengetik teks hasil transkripsi ke aplikasi Anda.",
+        "repairHint": "Permissions are checked automatically when you return from System Settings. If Handy Personal is already enabled but is not recognized, remove its old Accessibility entry and add /Applications/Handy Personal.app again."
       },
       "grant": "Berikan Izin",
       "granted": "Diizinkan",
@@ -117,7 +118,8 @@
       "errors": {
         "checkFailed": "Gagal memeriksa izin. Silakan coba lagi.",
         "requestFailed": "Gagal meminta izin. Silakan coba lagi."
-      }
+      },
+      "checkAgain": "Check permissions again"
     }
   },
   "modelSelector": {
